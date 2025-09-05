@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FinisseurWeb</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    header {
+      padding: 30px 30px 50px;
+      position: relative;
+      text-align: center;
+    }
+
+    /* Mise à jour du style pour le logo */
+    .logo-container-header img {
+      width: auto;
+      max-width: 80%; /* Ajuster pour éviter une taille trop grande sur mobile */
+      height: auto;
+      margin-bottom: 30px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .button-cta {
+      font-weight: 700;
+      border-radius: 9999px;
+      padding: 16px 28px;
+      font-size: 18px;
+      cursor: pointer;
+      user-select: none;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .bg-primary {
+      background-color: white;
+      color: black;
+      box-shadow: 0 0 12px 3px rgba(255, 255, 255, 0.7);
+      transition: transform 0.25s ease;
+    }
+
+    .bg-primary:hover {
+      transform: scale(1.08);
+    }
+
+    .bg-connexion {
+      background-color: #ff8c00;
+      color: black;
+      box-shadow: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .bg-connexion:hover {
+      background-color: #e77a00;
+      color: black;
+    }
+
+    .button-cta.bg-connexion svg path {
+      fill: black;
+    }
+
+    .button-cta svg {
+      width: 22px;
+      height: 22px;
+      fill: black;
+      flex-shrink: 0;
+    }
+
+    .videos-section {
+      padding: 130px 30px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 15px;
+    }
+
+    .video-card {
+      background: #1e1e1e;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    .video-card img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-info {
+      padding: 10px;
+      background: #2a2a2a;
+    }
+
+    .video-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .video-description {
+      font-size: 16px;
+      font-weight: bold;
+      color: #bbb;
+      transition: text-shadow 0.3s ease;
+    }
+
+    .video-card.normal:hover {
+      box-shadow: 0 0 12px #ff8c00, 0 0 25px #ff8c00, 0 0 40px #ffaa00;
+      transform: scale(1.05);
+      z-index: 10;
+    }
+
+    .video-card.normal:hover .video-description {
+      text-shadow: 0 0 5px #ffcc88, 0 0 10px #ff9900;
+    }
+
+    /* Styles pour les premium (inchangés) */
+    .video-card.premium .video-description {
+      color: #ffcc88;
+      text-shadow: 0 0 5px #ffcc88, 0 0 10px #ff9900;
+      font-weight: 900;
+    }
+
+    .video-card.premium:hover {
+      transform: scale(1.07);
+      opacity: 0.5;
+      box-shadow: none;
+    }
+
+    /* Nouveau : styles pour les VIP (identiques aux premium mais texte 'VIP' en orange) */
+    .video-card.vip .video-description {
+      color: #ff8c00; /* orange vif pour indiquer VIP */
+      text-shadow: 0 0 5px #ffcc88, 0 0 10px #ff9900;
+      font-weight: 900;
+    }
+
+    .video-card.vip:hover {
+      transform: scale(1.07);
+      opacity: 0.5;
+      box-shadow: none;
+    }
+
+    footer {
+      background: #1a1a1a;
+      padding: 20px;
+      text-align: center;
+      color: #bbb;
+    }
+
+    footer a {
+      color: #ff8c00;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: #e77a00;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .popup-content {
+      background: #1a1a1a;
+      padding: 20px 30px 25px;
+      border-radius: 12px;
+      text-align: center;
+      width: 380px;
+      max-width: 90%;
+      position: relative;
+    }
+
+    .popup-content img:first-child {
+      margin-bottom: 12px;
+    }
+
+    .popup-content h3 {
+      color: #fff;
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    .popup-content .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 24px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 20px;
+      text-decoration: none;
+      gap: 10px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    .popup-content .button img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .popup-content .button:hover {
+      background: #0056b3;
+    }
+
+    .popup .close {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 24px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header {
+        padding: 40px 20px;
+      }
+
+      .logo-container-header img {
+        width: 80%;
+        max-width: 300px;
+        margin-bottom: 20px;
+      }
+
+      nav {
+        justify-content: center;
+        gap: 15px;
+        margin-top: 15px;
+      }
+
+      .button-cta.bg-primary {
+        font-size: 16px;
+        padding: 12px 24px;
+      }
+
+      .videos-section {
+        padding: 80px 20px;
+      }
+
+      .video-card img {
+        height: 200px;
+      }
+
+      .video-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .popup-content {
+        width: 90%;
+        padding: 20px;
+      }
+
+      .popup-content .button {
+        font-size: 18px;
+        padding: 12px 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo-container-header">
+      <img src="https://i.imgur.com/3iVfZXD.png" alt="Logo" />
+    </div>
+    <nav>
+      <button class="button-cta bg-primary" onclick="showPopup()">Premium</button>
+      <a href="https://discord.com/invite/KSvDsNDmZp" target="_blank" rel="noopener"
+         class="button-cta bg-connexion">
+        <svg aria-hidden="true" focusable="false" role="img"
+             width="25" height="26" viewBox="0 0 25 26"
+             xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M12.5 0.0634155C5.6 0.0634155 0 5.85902 0 13C0 20.141 5.6 25.9366
+               12.5 25.9366C19.4 25.9366 25 20.141 25 13C25 5.85902 19.4 0.0634155
+               12.5 0.0634155ZM12.5002 3.94478C14.5752 3.94478 16.2502 5.67829
+               16.2502 7.82576C16.2502 9.97324 14.5752 11.7067 12.5002 11.7067
+               C10.4252 11.7067 8.75022 9.97324 8.75022 7.82576C8.75022 5.67829
+               10.4252 3.94478 12.5002 3.94478ZM4.99933 18.1492C6.61183 20.6589
+               9.37433 22.3148 12.4993 22.3148C15.6243 22.3148 18.3868
+               20.6589 19.9993 18.1492C19.9618 15.5748 14.9868 14.1647
+               12.4993 14.1647                9.99933 14.1647 5.03683 15.5748 4.99933 18.1492Z"
+            fill="black"></path>
+        </svg>
+        Connexion
+      </a>
+    </nav>
+  </header>
+
+  <!-- Contenu de la page -->
+  <section class="videos-section">
+    <div class="video-grid" id="videoGrid">
+      <!-- Les vignettes seront injectées ici via JS -->
+    </div>
+  </section>
+
+<div style="width: 100%; text-align: center;">
+  <iframe data-aa='2403768' src='//ad.a-ads.com/2403768?size=970x90' style='width:970px; height:90px; border:0px; padding:0; overflow:hidden; background-color: transparent;'></iframe>
+</div>
+
+  <footer>
+    &copy; 2025 - <a href="https://discord.com/invite/KSvDsNDmZp" target="_blank" rel="noopener">Discord</a>
+  </footer>
+
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <span class="close" onclick="closePopup()">&times;</span>
+      <img src="https://em-content.zobj.net/source/telegram/386/gem-stone_1f48e.webp" alt="Gem" style="width:200px;">
+      <h3>Achète le VIP maintenant pour accéder à tout le contenu !</h3>
+      <a href="https://discord.com/invite/KSvDsNDmZp" class="button" target="_blank" rel="noopener"
+         style="background:white;color:#6064f4;display:inline-flex;
+                align-items:center;gap:3px;padding:2px 6px;
+                border-radius:12px;font-weight:900;font-size:16px;
+                font-family:Arial,sans-serif;user-select:none;">
+        <img src="https://i.imgur.com/OcYkk6K.png" alt="Discord Icon"
+             style="width:40px;height:40px;flex-shrink:0;transform:translateY(5px);" />
+        Plus d’information
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Tableau des liens pour les 8 vignettes gratuites
+    const freeVideos = [
+      { title: "Mia Kalifa", description: "Gratuit", img: "https://m.media-amazon.com/images/M/MV5BZjA0MDgyYmItNzkzMC00OTM2LThlYzktMWMxZWU3ZGNkNDI3XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", url: "https://www.xnxx.com/porn-maker/mia-khalifa" },
+      { title: "Lana Rhoades", description: "Gratuit", img: "https://images.ladbible.com/resize?type=webp&quality=70&width=3840&fit=contain&gravity=auto&url=https://images.ladbiblegroup.com/v3/assets/bltcd74acc1d0a99f3a/bltadcb6a80e5ba1eaa/6849c0c7bfae80403e8ce4af/lana-rhoades-adult-industry.png", url: "https://fr.xvideos.com/pornstars/lana-rhoades" },
+      { title: "Sweetie Fox", description: "Gratuit", img: "https://static1.tgstat.ru/channels/_0/a3/a3a030e6e97044776e03fc3ad1abb053.jpg", url: "https://www.xnxx.com/porn-maker/sweetie_fox_official" },
+      { title: "Violet Myers", description: "Gratuit", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWDQvZTM0rbqA4TWJSv1ckZqZGHRuD3dhP0Donlv2idalgE6YniUT74CBQ5fWSQ9GIPp0&usqp=CAU", url: "https://fr.xvideos.com/pornstars/violet-myers" },
+      { title: "Candy Love", description: "Gratuit", img: "https://pbs.twimg.com/profile_images/1648686452010635266/m69tS0DW_400x400.jpg", url: "https://fr.pornhat.com/models/candy-love/" },
+      { title: "Eva Elfie", description: "Gratuit", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhO-zxbsRNBHgTUjHjc_yulWW-wgc4fJflzw&s", url: "https://fr.xvideos.com/pornstars/eva_elfie-model" },
+      { title: "Comatozze", description: "Gratuit", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9M2yHlVU9xCe39jZSoH9n2jhjLtM2BFESxjfZePy-pjGnrNa1oMJVDcp63kd70PRnuDg&usqp=CAU", url: "https://fr.xvideos.com/cumatozz_official" },
+      { title: "Molly Little", description: "Gratuit", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5ZiiHAJlHsYSo5DnEkB6kBEycqFiJ0W_8MZ2CATfsEPZvXMhXdUBt0SNAdT4tlcSxnLg&usqp=CAU", url: "https://fr.xvideos.com/pornstars/molly-little" },
+    ];
+
+    // Tableau des vidéos premium
+    const premiumVideos = [
+      { title: "Sophie Rain", description: "Premium", img: "https://c4.wallpaperflare.com/wallpaper/497/1006/568/women-model-women-outdoors-red-dress-tattoo-hd-wallpaper-preview.jpg" },
+      { title: "Aishah Sofey", description: "Premium", img: "https://imgs.search.brave.com/RHTRGJsYDz1yg2VVEddADoa2AfP7csCxyADFS6FNU7A/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bXVuZG9kZXBvcnRp/dm8uY29tL3VzL2Zp/bGVzL2NvbnRlbnRf/aW1hZ2VfbW9iaWxl/X2ZpbHRlci91cGxv/YWRzLzIwMjQvMTEv/MTAvNjczMDc4ZmQx/YzRhNC5wbmc", url: "https://example2.com" },
+{ title: "Lily Phillips", description: "Premium", img: "https://upload.wikimedia.org/wikipedia/commons/3/3a/Lily_Phillips.jpg", url: "https://example2.com" },
+{ title: "Bonnie Blue", description: "Premium", img: "https://imgs.search.brave.com/qC2nvTdiaNI83GR_sJNr7HfkW7WFcuavznoOUuzs4Rc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy90/aHVtYi9lL2ViL0Jv/bm5pZV9CbHVlX29u/X0hvbGx5X1JhbmRh/bGxfVW5maWx0ZXJl/ZC5qcGcvNTEycHgt/Qm9ubmllX0JsdWVf/b25fSG9sbHlfUmFu/ZGFsbF9VbmZpbHRl/cmVkLmpwZw", url: "https://example2.com" },
+{ title: "Kaizokouni", description: "Premium", img: "https://i.imgur.com/gXI3NuB.gif", url: "https://example2.com" },
+{ title: "Carla Vyx", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREfv7zomzRsMaUFvCnPZmFW1P5C3Tp8i-L2UVK_JtJe97lpqh9DU6qjad3GRXeSjdpuoM&usqp=CAU" },
+{ title: "Mel Popss", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5uZDD3Y1yGT8PAlkyumvuyojojmi1KAeP_w&s", url: "https://example2.com" },
+{ title: "Polska", description: "Premium", img: "https://static1.purepeople.com/articles/7/52/47/27/@/7732322-avant-de-devenir-celebre-elle-a-vecu-de-580x0-2.jpg", url: "https://example2.com" },
+{ title: "ToomuchLucile", description: "Premium", img: "https://leakimedia.com/data/attachments/362/362368-2d7661dcf5cfad8e2862981942e028b4.jpg" },
+{ title: "Tootatis", description: "Premium", img: "https://www.gentsu.fr/wp-content/uploads/2023/06/16_9-63.jpg" },
+{ title: "Khalamité", description: "Premium", img: "https://shop.khalamite.com/wp-content/uploads/2024/08/2024_07_salon1-15-sur-64-683x1024.jpg" },
+{ title: "Hannah OwO", description: "Premium", img: "https://i.pinimg.com/736x/64/d6/23/64d623137abff097544ab2582ecb72c4.jpg", url: "https://example2.com" },
+{ title: "Belle Delphine", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNFGgNXApKSX89PeMbQOYdS62pzfeVrzccdA&s", url: "https://example2.com" },
+{ title: "Skirby", description: "Premium", img: "https://pbs.twimg.com/profile_images/1801704245755801601/O_pobE6m_400x400.jpg", url: "https://example2.com" },
+{ title: "Nym", description: "Premium", img: "https://i.pinimg.com/736x/96/a0/45/96a045c46cc0695297ac9528289ef8d7.jpg", url: "https://example2.com" },
+{ title: "Maeva Ghennam", description: "Premium", img: "https://static1.purepeople.com/articles/0/50/84/50/@/7420354-apres-plusieurs-jours-de-silence-maeva-1200x0-3.jpg", url: "https://example2.com" },
+{ title: "Izzy Bunnies", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT7U4FmaJTPhW0Tb7AGyXbcyY0pA2bFTuZcw&s", url: "https://example2.com" },
+{ title: "Corinna Kopf", description: "Premium", img: "https://i.ebayimg.com/images/g/pU0AAOSwh-VjO2CD/s-l1200.jpg", url: "https://example2.com" },
+{ title: "Breckie Hill", description: "Premium", img: "https://imgs.search.brave.com/XlVEZUDOMYmcIv_M_SeE9qsbgtlk_v4DGQ7eGiFz18w/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzI2Lzc0/L2JhLzI2NzRiYTdh/OWY2MzJmYmIzYjY4/OTFiNDY1ODg0OTU5/LmpwZw", url: "https://example2.com" },
+{ title: "Anna Malygon", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSalRiivqHsOdbap1j7U3iaYsw06LcM204crQ&s", url: "https://example2.com" },
+{ title: "Camilla Araujo", description: "Premium", img: "https://s.yimg.com/ny/api/res/1.2/QQLafFjz65aBnIHD6FnsQg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyNDI7aD05MzI7Y2Y9d2VicA--/https://media.zenfs.com/en/where_is_the_buzz_814/909d06a0f57ce10ef46da3cec419d323", url: "https://example2.com" },
+{ title: "Emily Black", description: "Premium", img: "https://celebblinks.com/wp-content/uploads/2024/06/image-140436.jpg", url: "https://example2.com" },
+{ title: "Katie Sigmond", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQykcBykOAOja8fX8mZrL-rMyiw8C-4uJfa3A&s", url: "https://example2.com" },
+{ title: "Mikaylah", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgQ-XhzjyxvS66jhgbtdysdkr0vEcRWAgUg&s", url: "https://example2.com" },
+{ title: "Sunnyrayxo", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvsDDcfmZycmQW-6odz6YrOn3zvCTEN3q_1g&s", url: "https://example2.com" },
+{ title: "Kim Kardashian", description: "Premium", img: "https://imgs.search.brave.com/mC4qIYJ1id2kmdjYxjQsPzQfyN5fZg2DNcEf4dQhfgY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9kLm5l/d3N3ZWVrLmNvbS9l/bi9mdWxsLzI2MTYx/MzMva2ltLWthcmRh/c2hpYW4uanBnP3c9/NDY2Jmg9MzExJmY9/N2I4YWE2YWY1NjRk/NjllZTdiZGNlMjk0/NWQxNDI1YmQ", url: "https://example2.com" },
+{ title: "Evann Haley", description: "Premium", img: "https://yt3.googleusercontent.com/rPsXEsziunevCNto1_Lo7cD3PHrAzLFDhk3avbrxZI4DigkzuQ1VnIqZ8EFF3kH_AJPL7Urg=s900-c-k-c0x00ffffff-no-rj" },
+{ title: "Alipentz", description: "Premium", img: "https://pbs.twimg.com/media/GtqLwROXcAAn1s8?format=jpg&name=large" },
+{ title: "Nikky Dandelion", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgR4LaCC5jQNavuquTizAGWjvTaEc3Zy5RfJEP4oM5x7t9Igq17V66lDJQQxCeS_u2agM&usqp=CAU" },
+{ title: "Brooke Tilli", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNGbKn2t0UKj3d-c2yOTFD11_C7UkQNmJUVg&s" },
+{ title: "Gabby Stone", description: "Premium", img: "https://p1-tt.byteimg.com/origin/tos-cn-i-qvj2lq49k0/ce0a1954510c4330a94aadf0ecb69fcf.jpg" },
+{ title: "Riley Wood", description: "Premium", img: "https://i.pinimg.com/280x280_RS/3b/9b/4c/3b9b4c6f9faaff719ce14434bcef0b1d.jpg" },
+{ title: "Ambergoeswild", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKidbPTjt_krvDktORv9ygELDq9oy3QS1e2A&s" },
+{ title: "Lilmilk69", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQQk-f3V-p4q6cq52uKxhblJO5y6FNXBbcNA&s" },
+{ title: "Katiana Kay", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRo1Sw73PTR9E1u2eQLhPnnzJ6i-T08uA3i1ctarw8f7cJR98eAuDn0Q0V75kmbc6K6GQ&usqp=CAU" },
+    ];
+
+    // Création d'une liste VIP basée sur les premium (mêmes éléments mais description "VIP")
+    const vipVideos = premiumVideos.map(v => {
+      return {
+        title: v.title,
+        description: "VIP",
+        img: v.img,
+        url: v.url ? v.url : undefined
+      };
+    });
+
+    // Fonction pour créer une vignette gratuite (lien)
+    function createFreeCard(video) {
+      const a = document.createElement('a');
+      a.href = video.url;
+      a.target = "_blank";
+      a.className = "video-card normal";
+      a.style.textDecoration = "none";
+      a.innerHTML = `
+        <img src="${video.img}" alt="${video.title}">
+        <div class="video-info">
+          <div class="video-title">${video.title}</div>
+          <div class="video-description">${video.description}</div>
+        </div>
+      `;
+      return a;
+    }
+
+    // Fonction pour créer une vignette premium (lien)
+    function createPremiumCard(video) {
+      const div = document.createElement('div');
+      div.className = "video-card premium";
+      div.onclick = showPopup;
+      div.innerHTML = `
+        <img src="${video.img}" alt="${video.title}">
+        <div class="video-info">
+          <div class="video-title">${video.title}</div>
+          <div class="video-description">${video.description}</div>
+        </div>
+      `;
+      return div;
+    }
+
+    // Fonction pour créer une vignette VIP (mêmes comportements que premium mais label 'VIP')
+    function createVipCard(video) {
+      const div = document.createElement('div');
+      div.className = "video-card vip";
+      div.onclick = showPopup;
+      div.innerHTML = `
+        <img src="${video.img}" alt="${video.title}">
+        <div class="video-info">
+          <div class="video-title">${video.title}</div>
+          <div class="video-description">${video.description}</div>
+        </div>
+      `;
+      return div;
+    }
+
+    // Injection des vignettes dans le container
+    const videoGrid = document.getElementById('videoGrid');
+
+    // Ajout des vignettes gratuites
+    freeVideos.forEach(video => {
+      videoGrid.appendChild(createFreeCard(video));
+    });
+
+    // Ajout des vignettes premium
+    premiumVideos.forEach(video => {
+      videoGrid.appendChild(createPremiumCard(video));
+    });
+
+    // Ajout des vignettes VIP (identiques aux premium mais marquées VIP)
+    vipVideos.forEach(video => {
+      videoGrid.appendChild(createVipCard(video));
+    });
+
+    // Popup
+    function showPopup() {
+      document.getElementById('popup').style.display = 'flex';
+    }
+    function closePopup() {
+      document.getElementById('popup').style.display = 'none';
+    }
+  </script>
+
+</body>
+
+</html>
