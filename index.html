@@ -260,6 +260,15 @@
       cursor: pointer;
     }
 
+    /* Brillance (Glow) pour Premium et Exclusif */
+    .glowing {
+      text-shadow: 0 0 8px #ff8c00, 0 0 20px #ff8c00, 0 0 30px #ff8c00;
+    }
+
+    .glowing-exclusif {
+      text-shadow: 0 0 8px #8a2be2, 0 0 20px #8a2be2, 0 0 30px #8a2be2;
+    }
+
     /* Responsive Design */
     @media (max-width: 768px) {
       header {
@@ -353,7 +362,7 @@
       <span class="close" onclick="closePopup()">&times;</span>
       <img src="https://em-content.zobj.net/source/telegram/386/gem-stone_1f48e.webp" alt="Gem" style="width:200px;">
       <h3>Achète le VIP maintenant pour accéder à tout le contenu !</h3>
-      <h4 style="color: #ff8c00; font-weight: bold;">Premium <span style="color: white;">+ </span><span style="color: #8a2be2; font-weight: 900;">Exclusif</span></h4>
+      <h4 class="glowing">Premium <span style="color: white;">+ </span><span class="glowing-exclusif">Exclusif</span></h4>
       <a href="https://discord.com/invite/KSvDsNDmZp" class="button" target="_blank" rel="noopener"
          style="background:white;color:#6064f4;display:inline-flex;
                 align-items:center;gap:3px;padding:2px 6px;
