@@ -376,66 +376,24 @@
   </div>
 
   <script>
+    // Tableau des vidéos Exclusif
+    const exclusifVideos = [
+      { title: "Sophie Rain", description: "Exclusif", img: "https://c4.wallpaperflare.com/wallpaper/497/1006/568/women-model-women-outdoors-red-dress-tattoo-hd-wallpaper-preview.jpg" },
+      { title: "Aishah Sofey", description: "Exclusif", img: "https://imgs.search.brave.com/RHTRGJsYDz1yg2VVEddADoa2AfP7csCxyADFS6FNU7A/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bXVuZG9kZXBvcnRp/dm8uY29tL3VzL2Zp/bGVzL2NvbnRlbnRf/aW1hZ2VfbW9iaWxl/X2ZpbHRlci91cGxv/YWRzLzIwMjQvMTEv/MTAvNjczMDc4ZmQx/YzRhNC5wbmc", url: "https://example2.com" },
+      // Ajouter plus de vidéos exclusif ici
+    ];
+
     // Tableau des vidéos gratuites
     const freeVideos = [
       { title: "Mia Kalifa", description: "Gratuit", img: "https://m.media-amazon.com/images/M/MV5BZjA0MDgyYmItNzkzMC00OTM2LThlYzktMWMxZWU3ZGNkNDI3XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", url: "https://www.xnxx.com/porn-maker/mia-khalifa" },
       { title: "Lana Rhoades", description: "Gratuit", img: "https://images.ladbible.com/resize?type=webp&quality=70&width=3840&fit=contain&gravity=auto&url=https://images.ladbiblegroup.com/v3/assets/bltcd74acc1d0a99f3a/bltadcb6a80e5ba1eaa/6849c0c7bfae80403e8ce4af/lana-rhoades-adult-industry.png", url: "https://fr.xvideos.com/pornstars/lana-rhoades" },
-      // Ajouter d'autres vidéos gratuites ici
+      // Ajouter plus de vidéos gratuites ici
     ];
 
-    // Tableau des vidéos Premium
-    const premiumVideos = [
-      { title: "Sophie Rain", description: "Premium", img: "https://c4.wallpaperflare.com/wallpaper/497/1006/568/women-model-women-outdoors-red-dress-tattoo-hd-wallpaper-preview.jpg" },
-      { title: "Aishah Sofey", description: "Premium", img: "https://imgs.search.brave.com/RHTRGJsYDz1yg2VVEddADoa2AfP7csCxyADFS6FNU7A/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bXVuZG9kZXBvcnRp/dm8uY29tL3VzL2Zp/bGVzL2NvbnRlbnRf/aW1hZ2VfbW9iaWxl/X2ZpbHRlci91cGxv/YWRzLzIwMjQvMTEv/MTAvNjczMDc4ZmQx/YzRhNC5wbmc", url: "https://example2.com" },
-      // Ajouter d'autres vidéos Premium ici
-    ];
-
-    // Tableau des vidéos Exclusif (identiques aux Premium)
-    const exclusifVideos = premiumVideos.map(v => {
-      return {
-        title: v.title,
-        description: "Exclusif",
-        img: v.img,
-        url: v.url
-      };
-    });
-
-    // Fonction pour créer une vignette gratuite (lien)
-    function createFreeCard(video) {
-      const a = document.createElement('a');
-      a.href = video.url;
-      a.target = "_blank";
-      a.className = "video-card normal";
-      a.style.textDecoration = "none";
-      a.innerHTML = `
-        <img src="${video.img}" alt="${video.title}">
-        <div class="video-info">
-          <div class="video-title">${video.title}</div>
-          <div class="video-description">${video.description}</div>
-        </div>
-      `;
-      return a;
-    }
-
-    // Fonction pour créer une vignette Premium
-    function createPremiumCard(video) {
+    // Fonction pour créer une vignette vidéo (Gratuit, Exclusif, Premium)
+    function createVideoCard(video, type) {
       const div = document.createElement('div');
-      div.className = "video-card premium";
-      div.onclick = showPopup;
-      div.innerHTML = `
-        <img src="${video.img}" alt="${video.title}">
-        <div class="video-info">
-          <div class="video-title">${video.title}</div>
-          <div class="video-description">${video.description}</div>
-        </div>
-      `;
-      return div;
-    }
-
-    // Fonction pour créer une vignette Exclusif
-    function createExclusifCard(video) {
-      const div = document.createElement('div');
-      div.className = "video-card exclusif";
+      div.className = `video-card ${type}`;
       div.onclick = showPopup;
       div.innerHTML = `
         <img src="${video.img}" alt="${video.title}">
@@ -448,16 +406,11 @@
     }
 
     const videoGrid = document.getElementById('videoGrid');
-    freeVideos.forEach(video => {
-      videoGrid.appendChild(createFreeCard(video));
-    });
-
-    premiumVideos.forEach(video => {
-      videoGrid.appendChild(createPremiumCard(video));
-    });
-
     exclusifVideos.forEach(video => {
-      videoGrid.appendChild(createExclusifCard(video));
+      videoGrid.appendChild(createVideoCard(video, 'exclusif'));
+    });
+    freeVideos.forEach(video => {
+      videoGrid.appendChild(createVideoCard(video, 'normal'));
     });
 
     function showPopup() {
