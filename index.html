@@ -383,6 +383,13 @@
       // Ajouter plus de vidéos exclusif ici
     ];
 
+    // Tableau des vidéos Premium
+    const premiumVideos = [
+      { title: "Sophie Rain", description: "Premium", img: "https://c4.wallpaperflare.com/wallpaper/497/1006/568/women-model-women-outdoors-red-dress-tattoo-hd-wallpaper-preview.jpg" },
+      { title: "Aishah Sofey", description: "Premium", img: "https://imgs.search.brave.com/RHTRGJsYDz1yg2VVEddADoa2AfP7csCxyADFS6FNU7A/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bXVuZG9kZXBvcnRp/dm8uY29tL3VzL2Zp/bGVzL2NvbnRlbnRf/aW1hZ2VfbW9iaWxl/X2ZpbHRlci91cGxv/YWRzLzIwMjQvMTEv/MTAvNjczMDc4ZmQx/YzRhNC5wbmc", url: "https://example2.com" },
+      // Ajouter plus de vidéos premium ici
+    ];
+
     // Tableau des vidéos gratuites
     const freeVideos = [
       { title: "Mia Kalifa", description: "Gratuit", img: "https://m.media-amazon.com/images/M/MV5BZjA0MDgyYmItNzkzMC00OTM2LThlYzktMWMxZWU3ZGNkNDI3XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", url: "https://www.xnxx.com/porn-maker/mia-khalifa" },
@@ -408,6 +415,9 @@
     const videoGrid = document.getElementById('videoGrid');
     exclusifVideos.forEach(video => {
       videoGrid.appendChild(createVideoCard(video, 'exclusif'));
+    });
+    premiumVideos.forEach(video => {
+      videoGrid.appendChild(createVideoCard(video, 'premium'));
     });
     freeVideos.forEach(video => {
       videoGrid.appendChild(createVideoCard(video, 'normal'));
