@@ -352,9 +352,8 @@
     <div class="popup-content">
       <span class="close" onclick="closePopup()">&times;</span>
       <img src="https://em-content.zobj.net/source/telegram/386/gem-stone_1f48e.webp" alt="Gem" style="width:200px;">
-      <h3>Achète le VIP maintenant pour accéder à tout le contenu !</h3>
-      <h4 style="color: #ff8c00; font-weight: bold;">Premium</h4>
-      <h4 style="color: #8a2be2; font-weight: bold;">+ Exclusif</h4>
+      <h3>Achète le VIP maintenant pour accéder à tout le contenu !</h3>
+      <h4 style="color: #ff8c00; font-weight: bold;">Premium <span style="color: white;">+ </span><span style="color: #8a2be2; font-weight: 900;">Exclusif</span></h4>
       <a href="https://discord.com/invite/KSvDsNDmZp" class="button" target="_blank" rel="noopener"
          style="background:white;color:#6064f4;display:inline-flex;
                 align-items:center;gap:3px;padding:2px 6px;
@@ -368,18 +367,21 @@
   </div>
 
   <script>
+    // Tableau des vidéos gratuites
     const freeVideos = [
       { title: "Mia Kalifa", description: "Gratuit", img: "https://m.media-amazon.com/images/M/MV5BZjA0MDgyYmItNzkzMC00OTM2LThlYzktMWMxZWU3ZGNkNDI3XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", url: "https://www.xnxx.com/porn-maker/mia-khalifa" },
       { title: "Lana Rhoades", description: "Gratuit", img: "https://images.ladbible.com/resize?type=webp&quality=70&width=3840&fit=contain&gravity=auto&url=https://images.ladbiblegroup.com/v3/assets/bltcd74acc1d0a99f3a/bltadcb6a80e5ba1eaa/6849c0c7bfae80403e8ce4af/lana-rhoades-adult-industry.png", url: "https://fr.xvideos.com/pornstars/lana-rhoades" },
-      // Ajoute tes vidéos gratuites ici...
+      // Ajouter d'autres vidéos gratuites ici
     ];
 
+    // Tableau des vidéos Premium
     const premiumVideos = [
       { title: "Sophie Rain", description: "Premium", img: "https://c4.wallpaperflare.com/wallpaper/497/1006/568/women-model-women-outdoors-red-dress-tattoo-hd-wallpaper-preview.jpg" },
       { title: "Aishah Sofey", description: "Premium", img: "https://imgs.search.brave.com/RHTRGJsYDz1yg2VVEddADoa2AfP7csCxyADFS6FNU7A/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bXVuZG9kZXBvcnRp/dm8uY29tL3VzL2Zp/bGVzL2NvbnRlbnRf/aW1hZ2VfbW9iaWxl/X2ZpbHRlci91cGxv/YWRzLzIwMjQvMTEv/MTAvNjczMDc4ZmQx/YzRhNC5wbmc", url: "https://example2.com" },
-      // Ajoute tes vidéos premium ici...
+      // Ajouter d'autres vidéos Premium ici
     ];
 
+    // Tableau des vidéos Exclusif (identiques aux Premium)
     const exclusifVideos = premiumVideos.map(v => {
       return {
         title: v.title,
@@ -389,6 +391,7 @@
       };
     });
 
+    // Fonction pour créer une vignette gratuite (lien)
     function createFreeCard(video) {
       const a = document.createElement('a');
       a.href = video.url;
@@ -405,6 +408,7 @@
       return a;
     }
 
+    // Fonction pour créer une vignette Premium
     function createPremiumCard(video) {
       const div = document.createElement('div');
       div.className = "video-card premium";
@@ -419,6 +423,7 @@
       return div;
     }
 
+    // Fonction pour créer une vignette Exclusif
     function createExclusifCard(video) {
       const div = document.createElement('div');
       div.className = "video-card exclusif";
