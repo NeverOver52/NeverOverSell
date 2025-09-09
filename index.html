@@ -4,11 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FinisseurWeb</title>
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <title>FinisseurWeb - Exclusif Slideshow</title>
 
   <style>
     body {
@@ -113,13 +109,40 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
       cursor: pointer;
       color: inherit;
+      position: relative;
     }
 
-    .video-card img {
+    /* image simple (non slideshow) */
+    .video-card img.single-image {
       width: 100%;
       height: 250px;
       object-fit: cover;
       display: block;
+    }
+
+    /* conteneur slideshow */
+    .slideshow {
+      position: relative;
+      width: 100%;
+      height: 250px;
+      overflow: hidden;
+      display: block;
+      background: #111;
+    }
+
+    .slideshow img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .slideshow img.active {
+      opacity: 1;
     }
 
     .video-info {
@@ -296,7 +319,8 @@
         padding: 80px 20px;
       }
 
-      .video-card img {
+      .video-card img,
+      .slideshow img {
         height: 200px;
       }
 
@@ -376,81 +400,117 @@
   </div>
 
   <script>
-    // Tableau des vidéos Exclusif
+    // -- Données : on peut utiliser une string (une image) ou un tableau (2 ou 3 images)
     const exclusifVideos = [
+      // exemple avec 1 image (affiché normalement)
       { title: "Gretchen", description: "Exclusif", img: "https://i.imgur.com/tvYEPfn.jpeg", url: "https://example2.com" },
-      { title: "Sonia", description: "Exclusif", img: "https://i.imgur.com/bEfJ4jB.jpeg", url: "https://example2.com" },
-      { title: "Leticia", description: "Exclusif", img: "https://i.imgur.com/IV1QajU.jpeg", url: "https://example2.com" },
+      // exemple avec 2 images -> slideshow
+      { title: "Sonia", description: "Exclusif", img: [
+        "https://i.imgur.com/bEfJ4jB.jpeg",
+        "https://i.imgur.com/IV1QajU.jpeg"
+      ], url: "https://example2.com" },
+      // exemple avec 3 images -> slideshow
+      { title: "Leticia", description: "Exclusif", img: [
+        "https://i.imgur.com/6NFlZRH.jpeg",
+        "https://i.imgur.com/XIbjfoy.jpeg",
+        "https://i.imgur.com/ZAHiyJo.jpeg"
+      ], url: "https://example2.com" },
       { title: "Cherry", description: "Exclusif", img: "https://i.imgur.com/6NFlZRH.jpeg", url: "https://example2.com" },
       { title: "Martha", description: "Exclusif", img: "https://i.imgur.com/XIbjfoy.jpeg", url: "https://example2.com" },
       { title: "Luise", description: "Exclusif", img: "https://i.imgur.com/ZAHiyJo.jpeg", url: "https://example2.com" },
       { title: "Leola", description: "Exclusif", img: "https://i.imgur.com/CT6s3sx.jpeg", url: "https://example2.com" },
-      // Ajouter plus de vidéos exclusif ici
     ];
 
-    // Tableau des vidéos Premium
     const premiumVideos = [
       { title: "Sophie Rain", description: "Premium", img: "https://c4.wallpaperflare.com/wallpaper/497/1006/568/women-model-women-outdoors-red-dress-tattoo-hd-wallpaper-preview.jpg" },
-      { title: "Aishah Sofey", description: "Premium", img: "https://imgs.search.brave.com/RHTRGJsYDz1yg2VVEddADoa2AfP7csCxyADFS6FNU7A/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bXVuZG9kZXBvcnRp/dm8uY29tL3VzL2Zp/bGVzL2NvbnRlbnRf/aW1hZ2VfbW9iaWxl/X2ZpbHRlci91cGxv/YWRzLzIwMjQvMTEv/MTAvNjczMDc4ZmQx/YzRhNC5wbmc", url: "https://example2.com" },
-{ title: "Lily Phillips", description: "Premium", img: "https://upload.wikimedia.org/wikipedia/commons/3/3a/Lily_Phillips.jpg", url: "https://example2.com" },
-{ title: "Bonnie Blue", description: "Premium", img: "https://imgs.search.brave.com/qC2nvTdiaNI83GR_sJNr7HfkW7WFcuavznoOUuzs4Rc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy90/aHVtYi9lL2ViL0Jv/bm5pZV9CbHVlX29u/X0hvbGx5X1JhbmRh/bGxfVW5maWx0ZXJl/ZC5qcGcvNTEycHgt/Qm9ubmllX0JsdWVf/b25fSG9sbHlfUmFu/ZGFsbF9VbmZpbHRl/cmVkLmpwZw", url: "https://example2.com" },
-{ title: "Kaizokouni", description: "Premium", img: "https://i.imgur.com/gXI3NuB.gif", url: "https://example2.com" },
-{ title: "Carla Vyx", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREfv7zomzRsMaUFvCnPZmFW1P5C3Tp8i-L2UVK_JtJe97lpqh9DU6qjad3GRXeSjdpuoM&usqp=CAU" },
-{ title: "Mel Popss", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5uZDD3Y1yGT8PAlkyumvuyojojmi1KAeP_w&s", url: "https://example2.com" },
-{ title: "Polska", description: "Premium", img: "https://static1.purepeople.com/articles/7/52/47/27/@/7732322-avant-de-devenir-celebre-elle-a-vecu-de-580x0-2.jpg", url: "https://example2.com" },
-{ title: "ToomuchLucile", description: "Premium", img: "https://leakimedia.com/data/attachments/362/362368-2d7661dcf5cfad8e2862981942e028b4.jpg" },
-{ title: "Tootatis", description: "Premium", img: "https://www.gentsu.fr/wp-content/uploads/2023/06/16_9-63.jpg" },
-{ title: "Khalamité", description: "Premium", img: "https://shop.khalamite.com/wp-content/uploads/2024/08/2024_07_salon1-15-sur-64-683x1024.jpg" },
-{ title: "Hannah OwO", description: "Premium", img: "https://i.pinimg.com/736x/64/d6/23/64d623137abff097544ab2582ecb72c4.jpg", url: "https://example2.com" },
-{ title: "Belle Delphine", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNFGgNXApKSX89PeMbQOYdS62pzfeVrzccdA&s", url: "https://example2.com" },
-{ title: "Skirby", description: "Premium", img: "https://pbs.twimg.com/profile_images/1801704245755801601/O_pobE6m_400x400.jpg", url: "https://example2.com" },
-{ title: "Nym", description: "Premium", img: "https://i.pinimg.com/736x/96/a0/45/96a045c46cc0695297ac9528289ef8d7.jpg", url: "https://example2.com" },
-{ title: "Maeva Ghennam", description: "Premium", img: "https://static1.purepeople.com/articles/0/50/84/50/@/7420354-apres-plusieurs-jours-de-silence-maeva-1200x0-3.jpg", url: "https://example2.com" },
-{ title: "Izzy Bunnies", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT7U4FmaJTPhW0Tb7AGyXbcyY0pA2bFTuZcw&s", url: "https://example2.com" },
-{ title: "Corinna Kopf", description: "Premium", img: "https://i.ebayimg.com/images/g/pU0AAOSwh-VjO2CD/s-l1200.jpg", url: "https://example2.com" },
-{ title: "Breckie Hill", description: "Premium", img: "https://imgs.search.brave.com/XlVEZUDOMYmcIv_M_SeE9qsbgtlk_v4DGQ7eGiFz18w/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzI2Lzc0/L2JhLzI2NzRiYTdh/OWY2MzJmYmIzYjY4/OTFiNDY1ODg0OTU5/LmpwZw", url: "https://example2.com" },
-{ title: "Anna Malygon", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSalRiivqHsOdbap1j7U3iaYsw06LcM204crQ&s", url: "https://example2.com" },
-{ title: "Camilla Araujo", description: "Premium", img: "https://s.yimg.com/ny/api/res/1.2/QQLafFjz65aBnIHD6FnsQg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyNDI7aD05MzI7Y2Y9d2VicA--/https://media.zenfs.com/en/where_is_the_buzz_814/909d06a0f57ce10ef46da3cec419d323", url: "https://example2.com" },
-{ title: "Emily Black", description: "Premium", img: "https://celebblinks.com/wp-content/uploads/2024/06/image-140436.jpg", url: "https://example2.com" },
-{ title: "Katie Sigmond", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQykcBykOAOja8fX8mZrL-rMyiw8C-4uJfa3A&s", url: "https://example2.com" },
-{ title: "Mikaylah", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgQ-XhzjyxQvS66jhgbtdysdkr0vEcRWAgUg&s", url: "https://example2.com" },
-{ title: "Sunnyrayxo", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvsDDcfmZycmQW-6odz6YrOn3zvCTEN3q_1g&s", url: "https://example2.com" },
-{ title: "Kim Kardashian", description: "Premium", img: "https://imgs.search.brave.com/mC4qIYJ1id2kmdjYxjQsPzQfyN5fZg2DNcEf4dQhfgY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9kLm5l/d3N3ZWVrLmNvbS9l/bi9mdWxsLzI2MTYx/MzMva2ltLWthcmRh/c2hpYW4uanBnP3c9/NDY2Jmg9MzExJmY9/N2I4YWE2YWY1NjRk/NjllZTdiZGNlMjk0/NWQxNDI1YmQ", url: "https://example2.com" },
-{ title: "Evann Haley", description: "Premium", img: "https://yt3.googleusercontent.com/rPsXEsziunevCNto1_Lo7cD3PHrAzLFDhk3avbrxZI4DigkzuQ1VnIqZ8EFF3kH_AJPL7Urg=s900-c-k-c0x00ffffff-no-rj" },
-{ title: "Alipentz", description: "Premium", img: "https://pbs.twimg.com/media/GtqLwROXcAAn1s8?format=jpg&name=large" },
-{ title: "Nikky Dandelion", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgR4LaCC5jQNavuquTizAGWjvTaEc3Zy5RfJEP4oM5x7t9Igq17V66lDJQQxCeS_u2agM&usqp=CAU" },
-{ title: "Brooke Tilli", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNGbKn2t0UKj3d-c2yOTFD11_C7UkQNmJUVg&s" },
-{ title: "Gabby Stone", description: "Premium", img: "https://p1-tt.byteimg.com/origin/tos-cn-i-qvj2lq49k0/ce0a1954510c4330a94aadf0ecb69fcf.jpg" },
-{ title: "Riley Wood", description: "Premium", img: "https://i.pinimg.com/280x280_RS/3b/9b/4c/3b9b4c6f9faaff719ce14434bcef0b1d.jpg" },
-{ title: "Ambergoeswild", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKidbPTjt_krvDktORv9ygELDq9oy3QS1e2A&s" },
-{ title: "Lilmilk69", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQQk-f3V-p4q6cq52uKxhblJO5y6FNXBbcNA&s" },
-{ title: "Katiana Kay", description: "Premium", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRo1Sw73PTR9E1u2eQLhPnnzJ6i-T08uA3i1ctarw8f7cJR98eAuDn0Q0V75kmbc6K6GQ&usqp=CAU" },
+      { title: "Aishah Sofey", description: "Premium", img: "https://imgs.search.brave.com/RHTRGJsYDz1yg2VVEddADoa2AfP7csCxyADFS6FNU7A/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bXVuZG9kZXBvcnRp/dm8uY29tL3VzL2Zp/bGVzL2NvbnRlbnRf/aW1hZ2VfbW9iaWxl/X2ZpbHRlci91cGxv/YWRzLzIwMjQvMTEvMTAvNjczMDc4ZmQx/YzRhNC5wbmc" },
+      { title: "Lily Phillips", description: "Premium", img: "https://upload.wikimedia.org/wikipedia/commons/3/3a/Lily_Phillips.jpg" }
     ];
 
-    // Tableau des vidéos gratuites
     const freeVideos = [
-      { title: "Mia Kalifa", description: "Gratuit", img: "https://m.media-amazon.com/images/M/MV5BZjA0MDgyYmItNzkzMC00OTM2LThlYzktMWMxZWU3ZGNkNDI3XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", url: "https://www.xnxx.com/porn-maker/mia-khalifa" },
-      { title: "Lana Rhoades", description: "Gratuit", img: "https://images.ladbible.com/resize?type=webp&quality=70&width=3840&fit=contain&gravity=auto&url=https://images.ladbiblegroup.com/v3/assets/bltcd74acc1d0a99f3a/bltadcb6a80e5ba1eaa/6849c0c7bfae80403e8ce4af/lana-rhoades-adult-industry.png", url: "https://fr.xvideos.com/pornstars/lana-rhoades" },
-      { title: "Sweetie Fox", description: "Gratuit", img: "https://static1.tgstat.ru/channels/_0/a3/a3a030e6e97044776e03fc3ad1abb053.jpg", url: "https://www.xnxx.com/porn-maker/sweetie_fox_official" },
-      { title: "Violet Myers", description: "Gratuit", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWDQvZTM0rbqA4TWJSv1ckZqZGHRuD3dhP0Donlv2idalgE6YniUT74CBQ5fWSQ9GIPp0&usqp=CAU", url: "https://fr.xvideos.com/pornstars/violet-myers" },
-      { title: "Candy Love", description: "Gratuit", img: "https://pbs.twimg.com/profile_images/1648686452010635266/m69tS0DW_400x400.jpg", url: "https://fr.pornhat.com/models/candy-love/" },
-      { title: "Eva Elfie", description: "Gratuit", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhO-zxbsRNBHgTUjHjc_yulWW-wgc4fJflzw&s", url: "https://fr.xvideos.com/pornstars/eva_elfie-model" },
-      { title: "Comatozze", description: "Gratuit", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9M2yHlVU9xCe39jZSoH9n2jhjLtM2BFESxjfZePy-pjGnrNa1oMJVDcp63kd70PRnuDg&usqp=CAU", url: "https://fr.xvideos.com/cumatozz_official" },
-      { title: "Molly Little", description: "Gratuit", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5ZiiHAJlHsYSo5DnEkB6kBEycqFiJ0W_8MZ2CATfsEPZvXMhXdUBt0SNAdT4tlcSxnLg&usqp=CAU", url: "https://fr.xvideos.com/pornstars/molly-little" },
+      { title: "Mia Kalifa", description: "Gratuit", img: "https://m.media-amazon.com/images/M/MV5BZjA0MDgyYmItNzkzMC00OTM2LThlYzktMWMxZWU3ZGNkNDI3XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg", url: "https://www.xnxx.com/porn-maker/mia-khalifa" }
     ];
 
     // Fonction pour créer une vignette vidéo (Gratuit, Exclusif, Premium)
     function createVideoCard(video, type) {
       const div = document.createElement('div');
       div.className = `video-card ${type}`;
-      div.onclick = showPopup;
+      div.onclick = showPopup; // comportement existant
+
+      // Si exclusif et que video.img est un tableau avec >1 images => slideshow
+      const isExclusif = type === 'exclusif';
+      const imgs = Array.isArray(video.img) ? video.img : [video.img];
+
+      let mediaHTML = '';
+      if (isExclusif && imgs.length > 1) {
+        // conteneur slideshow avec plusieurs <img>
+        mediaHTML += '<div class="slideshow">';
+        imgs.forEach((src, idx) => {
+          // la classe "active" sera ajoutée ensuite via JS pour éviter le flash
+          mediaHTML += `<img data-idx="${idx}" src="${src}" alt="${video.title} slide ${idx+1}">`;
+        });
+        mediaHTML += '</div>';
+      } else {
+        // image simple (pour normal, premium, ou exclusif avec une seule image)
+        mediaHTML = `<img class="single-image" src="${imgs[0]}" alt="${video.title}">`;
+      }
+
       div.innerHTML = `
-        <img src="${video.img}" alt="${video.title}">
+        ${mediaHTML}
         <div class="video-info">
           <div class="video-title">${video.title}</div>
           <div class="video-description">${video.description}</div>
         </div>
       `;
+
+      // Si slideshow, initialiser le cycle (5s) et gestion pause au survol
+      if (isExclusif && imgs.length > 1) {
+        // récupérer les images du slideshow
+        const slides = Array.from(div.querySelectorAll('.slideshow img'));
+        let current = 0;
+        // montrer la première image
+        slides[current].classList.add('active');
+
+        // fonction de démarrage et d'arrêt
+        function start() {
+          // éviter plusieurs intervales
+          stop();
+          const id = setInterval(() => {
+            slides[current].classList.remove('active');
+            current = (current + 1) % slides.length;
+            slides[current].classList.add('active');
+          }, 5000); // 5000ms = 5s
+          div.dataset.slideshowId = id; // stocke l'id
+        }
+
+        function stop() {
+          if (div.dataset.slideshowId) {
+            clearInterval(parseInt(div.dataset.slideshowId, 10));
+            delete div.dataset.slideshowId;
+          }
+        }
+
+        // démarrer automatiquement
+        start();
+
+        // pause au survol pour meilleur UX
+        div.addEventListener('mouseenter', stop);
+        div.addEventListener('mouseleave', () => {
+          // redémarrer seulement si pas déjà démarré
+          if (!div.dataset.slideshowId) start();
+        });
+
+        // si la carte est retirée du DOM plus tard, on nettoie (sécurité)
+        // MutationObserver non essentiel mais utile si vous supprimez dynamiquement les cartes
+        const observer = new MutationObserver(() => {
+          if (!document.body.contains(div)) {
+            stop();
+            observer.disconnect();
+          }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+      }
+
       return div;
     }
 
